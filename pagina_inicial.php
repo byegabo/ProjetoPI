@@ -1,7 +1,26 @@
 <?php
 session_start();
 include('conexao.php');
+
+if (isset($_GET['nick'])) {
+    $nick = $_GET['nick'];
+
+    $sql = "SELECT * FROM usuarios WHERE nick = ?";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("s", $nick);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        header("Location: perfil.php?id=" . $user['id']);
+        exit();
+    } else {
+        $erro = "Usuário não encontrado!";
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -15,18 +34,22 @@ include('conexao.php');
 </head>
 <body>
     <nav>
-        <div class="logo">PixelPedia</div>
+        <div class="logo">
+        <a href="pagina_inicial.php">PixelPedia</a></div>
         <div class="search-bar">
             <input type="text" id="txtBusca" placeholder="Buscar...">
         </div>
         <div class="btn">
             <?php if(isset($_SESSION['id'])): ?>
-                <button onclick="window.location.href='perfil.php'" class="perfil">
-                    <img src="<?php echo $_SESSION['foto_perfil']; ?>" alt="Foto de Perfil" class="foto-perfil">
-                </button>
+                    <button class="perfil" onclick="toggleMenu()">
+                        <img src="<?php echo $_SESSION['foto_perfil']; ?>" alt="Foto de Perfil" class="foto-perfil">
+                    </button>
+                    <div class="perfil-menu" id="perfilMenu">
+                        <a style="text-decoration: none;" href="perfil.php">Meu Perfil</a>
+                    </div>
                 <button onclick="window.location.href='logout.php'" class="logout">Logout</button>
             <?php else: ?>
-                <button onclick="window.location.href='logecad.php'" class="cadastro">Sing in/Sing up</button>
+                <button onclick="window.location.href='logecad.php'" class="cadastro">Sign in/Sign up</button>
             <?php endif; ?>
         </div>
     </nav>
@@ -46,13 +69,13 @@ include('conexao.php');
                 <img src="Valorant.jpg" alt="slide 1">
             </div>
             <div class="slide-box">
-                <img src="CS.jpg" alt="slide 2">
+                <img src="img/CSban.png" alt="slide 2">
             </div>
             <div class="slide-box">
-                <img src="LOL.jpg" alt="slide 3">
+                <img src="img/LeagueBan.png" alt="slide 3">
             </div>
             <div class="slide-box">
-                <img src="R6.jpg" alt="slide 4">
+                <img src="img/R6ban.jpg" alt="slide 4">
             </div>
         </div>
 
@@ -72,29 +95,22 @@ include('conexao.php');
         </div>
     </div>
 
-    <div class="usuarios-online">
-        <h3>Usuários Online</h3>
-        <ul>
-            <?php
-            $query = "SELECT nick, status FROM usuarios";
-            $result = mysqli_query($conn, $query);
-            
-            while($row = mysqli_fetch_assoc($result)): ?>
-                <li>
-                    <div class="status">
-                        <?php if($row['status'] == 'online'): ?>
-                            <span class="circle online"></span>
-                        <?php elseif($row['status'] == 'ausente'): ?>
-                            <span class="circle ausente"></span>
-                        <?php else: ?>
-                            <span class="circle offline"></span>
-                        <?php endif; ?>
-                    </div>
-                    <span><?php echo $row['nick']; ?> - <?php echo ucfirst($row['status']); ?></span>
-                </li>
-            <?php endwhile; ?>
-        </ul>
-    </div>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('perfilMenu');
+            const container = menu.parentElement;
 
+            container.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function (event) {
+            const menu = document.getElementById('perfilMenu');
+            const container = menu.parentElement;
+
+            if (!container.contains(event.target)) {
+                container.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

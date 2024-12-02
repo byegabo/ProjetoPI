@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $sql = "INSERT INTO usuarios (nick, email, senha, data_nascimento, foto_perfil) VALUES ('$nick', '$email', '$senha_hash', '$data_nascimento', '$foto_perfil')";
                     if ($conn->query($sql) === TRUE) {
                         setcookie('modo', 'login', time() + (86400 * 30), "/");
-                        header("Location: login.php");
+                        header("Location: logecad.php");
                         exit();
                     } else {
                         $erro = "Erro ao cadastrar o usuário: " . $conn->error;
@@ -157,10 +157,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="alternar">
             <?php if ($modo == 'cadastro'): ?>
-                <p>Já tem uma conta? <a href="javascript:void(0)" onclick="document.forms[0].modo.value='login'; document.forms[0].submit();">Faça login</a></p>
+                <p>Já tem uma conta? <a style="text-decoration:none; color:blueviolet" href="javascript:void(0)" onclick="document.forms[0].modo.value='login'; document.forms[0].submit();">Faça login</a></p>
             <?php else: ?>
-                <p>Não tem uma conta? <a href="javascript:void(0)" onclick="document.forms[0].modo.value='cadastro'; document.forms[0].submit();">Cadastre-se</a></p>
+                <p>Não tem uma conta? <a style="text-decoration:none; color:blueviolet" href="javascript:void(0)" onclick="document.forms[0].modo.value='cadastro'; document.forms[0].submit();">Cadastre-se</a></p>
             <?php endif; ?>
+            <p><a style="text-decoration:none; color:blueviolet" href="redsenha.php">Esqueci minha senha</a></p>
         </div>
     </div>
 </body>

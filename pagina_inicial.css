@@ -19,11 +19,16 @@ nav {
     color: #202020;
 }
 
-.logo {
+.logo a {
     font-weight: 800;
     font-size: 25px;
+    text-decoration: none;
+    color: black;
 }
 
+a {
+    color: black;
+}   
 .search-bar {
     flex-grow: 1;
     margin: 0 20px;
@@ -135,7 +140,7 @@ nav {
 
 .nav-itens > li > a:hover {
     color: #fff;
-    background-color: #c14af038;
+    background-color: #ffffff38;
 }
 
 .description {
